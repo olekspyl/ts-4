@@ -1,3 +1,10 @@
+// Ви вирішили застосувати до меню контекст і тепер вам потрібно його типізувати.
+// Описати тип SelectedMenu: Це має бути об'єкт, який містить id з типом MenuIds
+// Описати тип MenuSelected: Цей тип є об'єктом, що містить selectedMenu
+// Описати тип MenuAction: Цей тип являє собою об'єкт з методом onSelectedMenu, який приймає об'єкт типу SelectedMenu як аргумент повертає void.
+// Описати тип PropsProvider: Опишіть правильний тип для дітей
+// Описати тип PropsMenu: Опишіть тип для menus, він має бути від типу Menu
+
 import React, { createContext, useMemo, useState, useContext } from "react";
 import noop from "lodash/noop";
 
@@ -5,24 +12,37 @@ type MenuIds = "first" | "second" | "last";
 type Menu = { id: MenuIds; title: string };
 
 // Додати тип Menu Selected
+type SelectedMenu = {
+  id: MenuIds,
+}
+
+type MenuSelected = {
+  selectedMenu: {
+    id: string,
+  }
+}
+
 
 const MenuSelectedContext = createContext<MenuSelected>({
-  selectedMenu: {},
+  selectedMenu: {id: 'first'},
 });
 
 // Додайте тип MenuAction
+type MenuAction = {
+  onSelectedMenu(object: SelectedMenu): void;
+}
 
 const MenuActionContext = createContext<MenuAction>({
   onSelectedMenu: noop,
 });
 
 type PropsProvider = {
-  children; // Додати тип для children
+  children: React.ReactElement; // Додати тип для children
 };
 
 function MenuProvider({ children }: PropsProvider) {
   // Додати тип для SelectedMenu він повинен містити { id }
-  const [selectedMenu, setSelectedMenu] = useState<SelectedMenu>({});
+  const [selectedMenu, setSelectedMenu] = useState<SelectedMenu>({id: 'first'});
 
   const menuContextAction = useMemo(
     () => ({
@@ -48,7 +68,7 @@ function MenuProvider({ children }: PropsProvider) {
 }
 
 type PropsMenu = {
-  menus; // Додайте вірний тип для меню
+  menus: Menu[]; // Додайте вірний тип для меню
 };
 
 function MenuComponent({ menus }: PropsMenu) {
